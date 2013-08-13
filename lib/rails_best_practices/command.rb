@@ -37,6 +37,15 @@ OptionParser.new do |opts|
     options['format'] = format
   end
 
+  opts.on("-r", "--require REQUIREFILE", "require file") do |file|
+    options['require'] = file
+  end
+
+  opts.on("--formatter CustomFormat", "output custom format") do |format|
+    options['customformat'] = format
+    options["silent"]       = true
+  end
+
   opts.on("--without-color", "only output plain text without color") do
     options["without-color"] = true
   end

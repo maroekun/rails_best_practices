@@ -59,7 +59,23 @@ module RailsBestPractices
 
     # Output the analyze result.
     def output
-      if @options["format"] == 'html'
+      if @options['customformat']
+        require @options['require']
+
+        @options['output-file'] ||= "rails_best_practices_output.customformat"
+
+        formatter_class = @options['customformat']
+
+        class_name = formatter_class.split('::')
+        formatter  = class_name.reduce(Object) do |namespace, constant_name|
+          namespace.const_get(constant_name, false)
+        end
+
+        fmt = formatter.new($stdout, errors)
+        fmt.started
+        fmt.add_file
+        fmt.finished
+      elsif @options["format"] == 'html'
         @options["output-file"] ||= "rails_best_practices_output.html"
         output_html_errors
       elsif @options["format"] == 'yaml'
